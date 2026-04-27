@@ -244,6 +244,18 @@ export function createListingFromStock(stockItemId, payload) {
   });
 }
 
+export function deleteStockItem(stockItemId) {
+  return authedJsonRequest(`/stock/${stockItemId}/`, {
+    method: "DELETE",
+  });
+}
+
+export function deleteAllStockItems() {
+  return authedJsonRequest("/stock/delete-all/", {
+    method: "DELETE",
+  });
+}
+
 export function fetchOrders() {
   return authedJsonRequest("/orders/");
 }

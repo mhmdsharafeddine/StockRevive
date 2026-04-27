@@ -93,9 +93,13 @@ class Command(BaseCommand):
 
         wholesale_products = [
             ("Intel Core i7-14700K Bulk Tray", "CPUs", Decimal("330.00"), stores[0], 45, 10, "low", "high", True),
+            ("NVIDIA RTX 4070 Super Case Pack", "GPUs", Decimal("535.00"), stores[0], 22, 5, "low", "high", True),
             ("NVIDIA RTX 4070 Super Case Pack", "GPUs", Decimal("540.00"), stores[1], 18, 5, "critical", "high", True),
+            ("NVIDIA RTX 4070 Super Case Pack", "GPUs", Decimal("795.00"), stores[2], 16, 5, "low", "high", False),
             ("ASUS B650E-F Motherboard Batch", "Motherboards", Decimal("205.00"), stores[2], 64, 8, "available", "medium", False),
             ("Corsair Vengeance 32GB DDR5 Kit", "RAM", Decimal("98.00"), stores[0], 120, 12, "available", "medium", False),
+            ("Corsair Vengeance 32GB DDR5 Kit", "RAM", Decimal("101.00"), stores[1], 88, 10, "available", "medium", False),
+            ("Corsair Vengeance 32GB DDR5 Kit", "RAM", Decimal("58.00"), stores[2], 94, 10, "available", "medium", True),
             ("Samsung 990 Pro 2TB NVMe Bulk", "Storage", Decimal("138.00"), stores[1], 32, 10, "low", "high", True),
             ("Cooler Master 850W Gold PSU Lot", "Power Supplies", Decimal("105.00"), stores[2], 8, 4, "critical", "high", False),
         ]

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Box, MapPin, Navigation, PackageCheck, Phone, ShieldCheck, Store, Truck } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Box, MapPin, Navigation, PackageCheck, Phone, ShieldCheck, Store, Truck } from "lucide-react";
 
 import { createListingRequest, fetchProductDeals, getAuthUser } from "../api/homepage.js";
 import Footer from "../components/Footer.jsx";
@@ -9,6 +9,71 @@ import { showSnackbar } from "../utils/snackbar.js";
 
 function formatPrice(value) {
   return Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+
+function medianPrice(values) {
+  if (!values.length) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0 ? (sorted[middle - 1] + sorted[middle]) / 2 : sorted[middle];
+}
+
+function normalizeAnomalyWarning(offer) {
+  if (!offer?.anomaly_warning) return null;
+  if (typeof offer.anomaly_warning === "string") {
+    return {
+      headline: "Anomaly detected",
+      summary: offer.anomaly_warning,
+      detail: "This store listing sits outside the normal price range for the same product.",
+    };
+  }
+  return offer.anomaly_warning;
+}
+
+function decorateOffersWithAnomalies(offers) {
+  if (!Array.isArray(offers) || offers.length === 0) return [];
+  if (offers.some((offer) => normalizeAnomalyWarning(offer))) {
+    return offers.map((offer) => ({ ...offer, anomaly_warning: normalizeAnomalyWarning(offer) }));
+  }
+
+  const prices = offers.map((offer) => Number(offer.price ?? 0)).filter((price) => price > 0);
+  if (prices.length < 2) return offers;
+
+  const median = medianPrice(prices);
+  const lowThreshold = median * 0.72;
+  const highThreshold = median * 1.55;
+  const flaggedIds = new Set(
+    offers
+      .filter((offer) => {
+        const price = Number(offer.price ?? 0);
+        return price > 0 && (price <= lowThreshold || price >= highThreshold);
+      })
+      .map((offer) => offer.id),
+  );
+
+  if (flaggedIds.size === 0) return offers;
+
+  const typicalOffers = offers.filter((offer) => !flaggedIds.has(offer.id));
+  const typicalPrices = typicalOffers.map((offer) => Number(offer.price ?? 0)).filter((price) => price > 0);
+  const rangeLow = typicalPrices.length ? Math.min(...typicalPrices) : Math.min(...prices);
+  const rangeHigh = typicalPrices.length ? Math.max(...typicalPrices) : Math.max(...prices);
+
+  return offers.map((offer) => {
+    if (!flaggedIds.has(offer.id)) return offer;
+
+    const price = Number(offer.price ?? 0);
+    const isLow = price <= lowThreshold;
+    const deviation = Math.round(Math.abs(((price - median) / median) * 100));
+
+    return {
+      ...offer,
+      anomaly_warning: {
+        headline: isLow ? "Anomaly detected" : "Scam warning",
+        summary: `${deviation}% ${isLow ? "below" : "above"} the usual market range for this product.`,
+        detail: `Comparable store listings are around $${formatPrice(rangeLow)}-$${formatPrice(rangeHigh)}. ${isLow ? "Confirm authenticity, condition, and warranty before ordering." : "Double-check the asking price and seller details before buying."}`,
+      },
+    };
+  });
 }
 
 export default function ProductDetailPage({ productId }) {
@@ -30,6 +95,8 @@ export default function ProductDetailPage({ productId }) {
   const sortedOffers = useMemo(() => {
     return [...offers].sort((a, b) => Number(a.price) - Number(b.price));
   }, [offers]);
+
+  const decoratedOffers = useMemo(() => decorateOffersWithAnomalies(sortedOffers), [sortedOffers]);
 
   async function sendStoreRequest(requestType, offer) {
     const user = getAuthUser();
@@ -148,7 +215,7 @@ export default function ProductDetailPage({ productId }) {
             <section className="store-offers-section">
               <h2>Available at These Stores</h2>
               <div className="store-offers-list">
-                {sortedOffers.map((offer, index) => (
+                {decoratedOffers.map((offer, index) => (
                   <article className="store-offer-card" key={offer.id}>
                     <div className="store-offer-card__info">
                       <div className="store-offer-card__title">
@@ -171,6 +238,16 @@ export default function ProductDetailPage({ productId }) {
                         </span>
                         <span>{offer.condition_label}</span>
                       </div>
+                      {offer.anomaly_warning && (
+                        <div className="store-offer-card__anomaly" role="note" aria-label={`${offer.anomaly_warning.headline}: ${offer.anomaly_warning.summary}`}>
+                          <div className="store-offer-card__anomaly-title">
+                            <AlertTriangle size={16} />
+                            <strong>{offer.anomaly_warning.headline}</strong>
+                          </div>
+                          <span>{offer.anomaly_warning.summary}</span>
+                          <p>{offer.anomaly_warning.detail}</p>
+                        </div>
+                      )}
                       {offer.seller_phone && (
                         <p>
                           <Phone size={16} />

@@ -1,0 +1,9 @@
+sku,product_name,category,quantity,unit_cost,suggested_retail_price,suggested_wholesale_price,min_order_quantity,condition,depot_location,description,received_at
+CPU-I7-12700K-OLD,Intel Core i7-12700K,CPUs,11,205,239,219,3,open_box,Depot C - Shelf 4,Older Intel batch held in storage for months and priced to move,2025-09-12
+GPU-RTX-3060TI-OLD,NVIDIA RTX 3060 Ti,GPUs,7,255,299,279,2,open_box,Depot B - Cage 3,Previous generation GPU stock with slower turnover from prior season,2025-11-03
+SSD-970EVO-1TB,Samsung 970 EVO Plus 1TB,Storage,18,48,59,52,4,new,Depot A - Shelf 7,Long-sitting SSD inventory marked lower for faster listing conversion,2025-10-26
+RAM-DDR4-32GB,Corsair Vengeance LPX 32GB DDR4,RAM,22,56,69,61,5,new,Depot C - Bin 2,DDR4 memory stock aging in depot after upgrade cycle shift,2025-08-18
+PSU-EVGA-750BQ,EVGA 750 BQ PSU,Power Supplies,15,52,69,59,4,new,Depot A - Shelf 9,Slow-moving power supply lot better suited for aggressive listing price,2025-12-01
+CASE-NZXT-H510,NZXT H510 Mid Tower Case,Cases,9,44,59,49,2,open_box,Depot D - Rack 1,Case inventory held too long due to low demand and storage bulk,2025-09-29
+MB-B550-AORUS,Gigabyte B550 AORUS Elite,Motherboards,13,88,109,97,3,new,Depot B - Shelf 6,AM4 motherboard stock from older purchasing cycle ready for clearance-style pricing,2025-07-14
+COOLER-H100I,Corsair H100i RGB Cooler,Cooling,10,67,84,75,2,open_box,Depot C - Shelf 1,Older cooler batch with stale turnover and reduced target margin,2025-10-05

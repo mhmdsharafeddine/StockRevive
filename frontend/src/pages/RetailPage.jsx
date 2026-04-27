@@ -94,6 +94,54 @@ function firstError(error) {
   return Array.isArray(value) ? value[0] : value ?? "Unable to create listing.";
 }
 
+function groupRetailProducts(items) {
+  if (!Array.isArray(items) || items.length === 0) return [];
+  const grouped = new Map();
+
+  items.forEach((product) => {
+    const key = `${product.name}::${product.category}`;
+    const current = grouped.get(key);
+    const quantity = Number(product.quantity ?? 0);
+    const price = Number(product.price ?? 0);
+
+    if (!current) {
+      grouped.set(key, {
+        ...product,
+        lowest_price: price,
+        total_quantity: quantity,
+        store_count: 1,
+      });
+      return;
+    }
+
+    grouped.set(key, {
+      ...current,
+      id: current.id,
+      photo_url: current.photo_url || product.photo_url,
+      image: current.image || product.image,
+      image_url: current.image_url || product.image_url,
+      lowest_price: Math.min(Number(current.lowest_price ?? price), price),
+      total_quantity: Number(current.total_quantity ?? 0) + quantity,
+      store_count: Number(current.store_count ?? 1) + 1,
+      quantity: Number(current.total_quantity ?? 0) + quantity,
+      stock_status:
+        Number(current.total_quantity ?? 0) + quantity < 1
+          ? "out_of_stock"
+          : Number(current.total_quantity ?? 0) + quantity <= 2
+            ? "low_stock"
+            : "in_stock",
+      stock_label:
+        Number(current.total_quantity ?? 0) + quantity < 1
+          ? "Out of stock"
+          : Number(current.total_quantity ?? 0) + quantity <= 2
+            ? "Low stock"
+            : "In stock",
+    });
+  });
+
+  return [...grouped.values()];
+}
+
 function CustomSelect({ label, name, options, value, onChange, required = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const selected = options.find((option) => option.value === value) ?? options[0];
@@ -147,19 +195,23 @@ function ProductListingCard({ product, view }) {
         <h3>{product.name}</h3>
         <p>{product.category}</p>
         <div className="retail-card__price">
-          <strong>${formatPrice(product.price)}</strong>
-          <span>{product.condition_label ?? "New"}</span>
+          <strong>${formatPrice(product.lowest_price ?? product.price)}</strong>
+          <span>from {product.store_count ?? 1} store{Number(product.store_count ?? 1) === 1 ? "" : "s"}</span>
         </div>
         <div className="retail-card__meta">
           <span>
             <MapPin size={15} />
-            {product.store?.city ?? "Beirut"}
+            {(product.store_count ?? 1) > 1 ? "Multiple stores" : product.store?.city ?? "Beirut"}
           </span>
-          <strong>{product.quantity ?? 1} available</strong>
+          <strong>{product.total_quantity ?? product.quantity ?? 1} available</strong>
         </div>
         <div className="retail-card__seller">
-          <span>{product.seller_name || product.store?.name || "Independent Seller"}</span>
-          {product.seller_phone && <small>{product.seller_phone}</small>}
+          <span>
+            {(product.store_count ?? 1) > 1
+              ? `Compare ${product.store_count} store listings`
+              : product.seller_name || product.store?.name || "Independent Seller"}
+          </span>
+          {(product.store_count ?? 1) > 1 ? <small>Open product details to review each store offer</small> : product.seller_phone && <small>{product.seller_phone}</small>}
         </div>
       </div>
     </a>
@@ -324,13 +376,15 @@ export default function RetailPage() {
       .catch(() => setProducts(fallbackProducts));
   }, []);
 
+  const groupedProducts = useMemo(() => groupRetailProducts(products), [products]);
+
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    return groupedProducts.filter((product) => {
       const matchesCategory = category === "All Categories" || product.category === category;
       const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [category, products, search]);
+  }, [category, groupedProducts, search]);
 
   function handleCreated(product) {
     setProducts((current) => [product, ...current]);

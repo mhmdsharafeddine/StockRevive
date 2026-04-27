@@ -1,0 +1,9 @@
+sku,product_name,category,quantity,unit_cost,suggested_retail_price,suggested_wholesale_price,min_order_quantity,condition,depot_location,description,received_at
+CPU-RYZEN-7600,AMD Ryzen 5 7600,CPUs,12,175,219,199,3,new,Depot A - Shelf 1,Fresh CPU stock recently received and ready for normal listing,2026-04-12
+GPU-RTX-4060,NVIDIA RTX 4060,GPUs,9,255,319,289,2,new,Depot B - Cage 2,Watch stock starting to sit longer than expected in depot,2026-02-18
+SSD-SN770-1TB,WD Black SN770 1TB,Storage,16,52,69,61,4,new,Depot C - Shelf 6,Slow-moving SSD inventory from an earlier restock cycle,2026-01-14
+RAM-DDR5-32GB,Corsair Vengeance 32GB DDR5,RAM,20,78,99,89,4,new,Depot D - Bin 3,Aging memory stock that may need a stronger listing price,2025-12-03
+PSU-RM750E,Corsair RM750e PSU,Power Supplies,14,71,95,84,3,new,Depot A - Shelf 8,Older PSU stock held in depot for a long time and priced to move,2025-08-20
+MB-B650M,MSI B650M Mortar WiFi,Motherboards,11,122,149,136,3,open_box,Depot B - Shelf 5,Long-held AM5 motherboard stock with slower than expected turnover,2025-07-28
+CASE-POP-AIR,Fractal Pop Air Case,Cases,7,58,79,69,2,open_box,Depot C - Rack 2,Aging case inventory taking space in depot and needing faster sell-through,2025-11-22
+COOLER-AK400,DeepCool AK400,Cooling,18,24,35,29,5,new,Depot D - Shelf 4,Watch stock with healthy quantity but slower pickup than forecast,2026-02-05

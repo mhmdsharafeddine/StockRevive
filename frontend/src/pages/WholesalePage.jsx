@@ -14,6 +14,13 @@ function formatPrice(value) {
   return Number(value).toLocaleString(undefined, { maximumFractionDigits: 0 });
 }
 
+function medianPrice(values) {
+  if (!values.length) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0 ? (sorted[middle - 1] + sorted[middle]) / 2 : sorted[middle];
+}
+
 function stockClass(status) {
   if (status === "critical") return "wholesale-badge wholesale-badge--critical";
   if (status === "low") return "wholesale-badge wholesale-badge--low";
@@ -31,6 +38,70 @@ function effectiveMinimumOrder(listing) {
   const minimum = Number(listing?.min_order_quantity ?? 1);
   if (available < 1) return minimum;
   return Math.min(minimum, available);
+}
+
+function normalizeWholesaleAnomalyWarning(listing) {
+  if (!listing?.anomaly_warning) return null;
+  if (typeof listing.anomaly_warning === "string") {
+    return {
+      headline: "Scam warning",
+      summary: listing.anomaly_warning,
+      detail: "This wholesale listing sits outside the normal market range for the same product.",
+    };
+  }
+  return listing.anomaly_warning;
+}
+
+function decorateWholesaleListingsWithAnomalies(listings) {
+  if (!Array.isArray(listings) || listings.length === 0) return [];
+
+  const groups = new Map();
+  listings.forEach((listing) => {
+    const key = `${listing.product_name}::${listing.category}`;
+    const current = groups.get(key) ?? [];
+    current.push(listing);
+    groups.set(key, current);
+  });
+
+  return listings.map((listing) => {
+    const suppliedWarning = normalizeWholesaleAnomalyWarning(listing);
+    if (suppliedWarning) {
+      return { ...listing, anomaly_warning: suppliedWarning };
+    }
+
+    const comparable = groups.get(`${listing.product_name}::${listing.category}`) ?? [];
+    const prices = comparable.map((item) => Number(item.wholesale_price ?? 0)).filter((price) => price > 0);
+    if (prices.length < 3) return listing;
+
+    const median = medianPrice(prices);
+    if (!median) return listing;
+
+    const price = Number(listing.wholesale_price ?? 0);
+    const lowThreshold = median * 0.72;
+    const highThreshold = median * 1.35;
+    const isLow = price <= lowThreshold;
+    const isHigh = price >= highThreshold;
+
+    if (!isLow && !isHigh) return listing;
+
+    const typicalListings = comparable.filter((item) => {
+      const itemPrice = Number(item.wholesale_price ?? 0);
+      return itemPrice > lowThreshold && itemPrice < highThreshold;
+    });
+    const typicalPrices = typicalListings.map((item) => Number(item.wholesale_price ?? 0)).filter((itemPrice) => itemPrice > 0);
+    const rangeLow = typicalPrices.length ? Math.min(...typicalPrices) : Math.min(...prices);
+    const rangeHigh = typicalPrices.length ? Math.max(...typicalPrices) : Math.max(...prices);
+    const deviation = Math.round(Math.abs(((price - median) / median) * 100));
+
+    return {
+      ...listing,
+      anomaly_warning: {
+        headline: "Scam warning",
+        summary: `${deviation}% ${isLow ? "below" : "above"} the usual wholesale range for this product.`,
+        detail: `Comparable listings are around $${formatPrice(rangeLow)}-$${formatPrice(rangeHigh)} per unit. ${isLow ? "Verify authenticity, batch details, and warranty before ordering." : "Double-check the asking price and seller terms before committing to the order."}`,
+      },
+    };
+  });
 }
 
 function WholesaleListingModal({ onClose, onCreated }) {
@@ -242,6 +313,16 @@ function WholesaleCard({ listing, onAction }) {
           {listing.city || listing.store?.city || "Beirut"} - {listing.distance_miles} mi
         </p>
         {listing.description && <p className="wholesale-card__description">{listing.description}</p>}
+        {listing.anomaly_warning && (
+          <div className="wholesale-card__anomaly" role="note" aria-label={`${listing.anomaly_warning.headline}: ${listing.anomaly_warning.summary}`}>
+            <div className="wholesale-card__anomaly-title">
+              <AlertTriangle size={16} />
+              <strong>{listing.anomaly_warning.headline}</strong>
+            </div>
+            <span>{listing.anomaly_warning.summary}</span>
+            <p>{listing.anomaly_warning.detail}</p>
+          </div>
+        )}
       </div>
       <aside className="wholesale-card__side">
         <div className="wholesale-price-box">
@@ -290,7 +371,7 @@ export default function WholesalePage() {
   }, []);
 
   const filteredListings = useMemo(() => {
-    return listings.filter((listing) => {
+    return decorateWholesaleListingsWithAnomalies(listings).filter((listing) => {
       const matchesSearch = listing.product_name.toLowerCase().includes(search.toLowerCase()) || listing.category.toLowerCase().includes(search.toLowerCase());
       const matchesTab =
         tab === "All Listings" ||

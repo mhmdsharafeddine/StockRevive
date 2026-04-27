@@ -1,4 +1,4 @@
-sku,product_name,category,quantity,unit_cost,suggested_retail_price,suggested_wholesale_price,min_order_quantity,condition,depot_location,description
-CPU-I7-14700K,Intel Core i7-14700K,CPUs,24,315,379,335,5,new,Depot A - Shelf 2,Boxed CPUs ready for retail or bulk listing
-GPU-RTX-4070S,NVIDIA RTX 4070 Super,GPUs,8,530,619,570,2,new,Depot B - Cage 1,Limited GPU batch from distributor
-PSU-CM-850G,Cooler Master 850W Gold PSU,Power Supplies,14,78,119,95,4,new,Depot A - Shelf 5,Gold rated power supply lot
+sku,product_name,category,quantity,unit_cost,suggested_retail_price,suggested_wholesale_price,min_order_quantity,condition,depot_location,description,received_at
+CPU-I7-14700K,Intel Core i7-14700K,CPUs,24,315,379,335,5,new,Depot A - Shelf 2,Boxed CPUs ready for retail or bulk listing,2026-03-15
+GPU-RTX-4070S,NVIDIA RTX 4070 Super,GPUs,8,530,619,570,2,new,Depot B - Cage 1,Limited GPU batch from distributor,2026-04-10
+PSU-CM-850G,Cooler Master 850W Gold PSU,Power Supplies,14,78,119,95,4,new,Depot A - Shelf 5,Gold rated power supply lot,2026-02-01

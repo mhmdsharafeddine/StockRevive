@@ -36,11 +36,11 @@ const metrics = [
 ];
 
 const barData = [
-  { name: "iPhone 15", supply: 145, demand: 280 },
-  { name: "AirPods Pro", supply: 89, demand: 320 },
-  { name: "Galaxy S24", supply: 210, demand: 180 },
-  { name: "MacBook", supply: 165, demand: 240 },
-  { name: "iPad Air", supply: 190, demand: 160 },
+  { name: "Ryzen 7 7800X3D", supply: 145, demand: 280 },
+  { name: "RTX 4070 Super", supply: 89, demand: 320 },
+  { name: "Intel i7-14700K", supply: 210, demand: 180 },
+  { name: "990 Pro 2TB", supply: 165, demand: 240 },
+  { name: "4070 Case Pack", supply: 190, demand: 160 },
 ];
 
 const regions = [
@@ -52,8 +52,8 @@ const regions = [
 
 const risingProducts = [
   {
-    name: "iPhone 15 Pro Max",
-    category: "Smartphones",
+    name: "AMD Ryzen 7 7800X3D",
+    category: "CPUs",
     growth: "+45%",
     stock: "145 units",
     demand: "280 units",
@@ -62,8 +62,8 @@ const risingProducts = [
     note: "",
   },
   {
-    name: "AirPods Pro 2nd Gen",
-    category: "Audio",
+    name: "NVIDIA RTX 4070 Super Case Pack",
+    category: "GPUs",
     growth: "+38%",
     stock: "89 units",
     demand: "320 units",
@@ -72,8 +72,8 @@ const risingProducts = [
     note: "Immediate restocking required. Demand exceeds supply by 260%. Consider wholesale purchase within 24-48 hours.",
   },
   {
-    name: "MacBook Pro M3",
-    category: "Laptops",
+    name: "Intel Core i7-14700K",
+    category: "CPUs",
     growth: "+29%",
     stock: "210 units",
     demand: "250 units",
@@ -82,8 +82,8 @@ const risingProducts = [
     note: "",
   },
   {
-    name: "Samsung Galaxy S24",
-    category: "Smartphones",
+    name: "Samsung 990 Pro 2TB NVMe Bulk",
+    category: "Storage",
     growth: "+22%",
     stock: "165 units",
     demand: "200 units",
@@ -92,6 +92,12 @@ const risingProducts = [
     note: "",
   },
 ];
+
+function riskBadgeClass(risk) {
+  if (risk === "Critical") return "wholesale-badge wholesale-badge--critical";
+  if (risk === "High Risk") return "wholesale-badge wholesale-badge--low";
+  return "wholesale-badge wholesale-badge--available";
+}
 
 function MetricCard({ metric }) {
   const Icon = metric.icon;
@@ -112,7 +118,7 @@ function MetricCard({ metric }) {
 
 function AreaChart() {
   return (
-    <div className="insights-chart insights-chart--area" aria-label="Demand trends by category">
+    <div className="insights-chart insights-chart--area" aria-label="Demand trends for marketplace categories">
       <svg viewBox="0 0 640 340" role="img">
         <defs>
           <linearGradient id="insights-area-fill" x1="0" x2="0" y1="0" y2="1">
@@ -159,9 +165,9 @@ function AreaChart() {
         ))}
       </div>
       <div className="insights-legend">
-        <span><i /> Smartphones</span>
-        <span><i /> Laptops</span>
-        <span><i /> Audio</span>
+        <span><i /> CPUs</span>
+        <span><i /> GPUs</span>
+        <span><i /> Storage</span>
       </div>
     </div>
   );
@@ -238,40 +244,46 @@ function RisingProducts() {
       <div className="rising-list">
         {risingProducts.map((product, index) => (
           <article className="rising-item" key={product.name}>
-            <div className="rising-item__top">
-              <div>
-                <h3>
-                  {index + 1}. {product.name}
-                  <span>{product.category}</span>
-                </h3>
-                <p>Demand growing at <strong>{product.growth}</strong></p>
+            <div className="rising-item__main">
+              <div className="rising-item__top">
+                <div>
+                  <h3>{index + 1}. {product.name}</h3>
+                  <p>Demand growing at <strong>{product.growth}</strong></p>
+                </div>
+                <div className="rising-item__badges">
+                  <span className="wholesale-badge">{product.category}</span>
+                  {product.risk && <span className={riskBadgeClass(product.risk)}>{product.risk}</span>}
+                </div>
               </div>
-              {product.risk && (
-                <small className={product.risk === "Critical" ? "risk-badge risk-badge--critical" : "risk-badge"}>
-                  {product.risk}
-                </small>
+              <div className="rising-item__stats">
+                <div>
+                  <span>Current Stock</span>
+                  <strong>{product.stock}</strong>
+                </div>
+                <div>
+                  <span>Projected Demand</span>
+                  <strong>{product.demand}</strong>
+                </div>
+                <div>
+                  <span>Gap</span>
+                  <strong>{product.gap}</strong>
+                </div>
+              </div>
+              {product.note && (
+                <p className="restock-note">
+                  <Zap size={18} />
+                  Restock note: {product.note}
+                </p>
               )}
             </div>
-            <div className="rising-item__stats">
-              <div>
-                <span>Current Stock</span>
-                <strong>{product.stock}</strong>
+            <aside className="rising-item__side">
+              <div className="rising-item__summary">
+                <span>Trend Rate</span>
+                <strong>{product.growth}</strong>
+                <span>Demand Signal</span>
+                <strong>{product.risk || "Stable"}</strong>
               </div>
-              <div>
-                <span>Projected Demand</span>
-                <strong>{product.demand}</strong>
-              </div>
-              <div>
-                <span>Gap</span>
-                <strong>{product.gap}</strong>
-              </div>
-            </div>
-            {product.note && (
-              <p className="restock-note">
-                <Zap size={18} />
-                Restock note: {product.note}
-              </p>
-            )}
+            </aside>
           </article>
         ))}
       </div>
