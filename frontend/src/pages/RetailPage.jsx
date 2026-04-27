@@ -296,19 +296,23 @@ function ProductListingCard({ product, view }) {
           <strong>{product.wait_message ?? "Supply looks stable, so there is no strong rush to buy today."}</strong>
         </div>
         <div className="retail-card__meta">
-          <span>
+          <span className="retail-card__location">
             <MapPin size={15} />
             {(product.store_count ?? 1) > 1 ? "Multiple stores" : product.store?.city ?? "Beirut"}
           </span>
           <strong>{product.total_quantity ?? product.quantity ?? 1} available</strong>
         </div>
         <div className="retail-card__seller">
-          <span>
+          <strong>
             {(product.store_count ?? 1) > 1
               ? `Compare ${product.store_count} store listings`
               : product.seller_name || product.store?.name || "Independent Seller"}
-          </span>
-          {(product.store_count ?? 1) > 1 ? <small>Open product details to review each store offer</small> : product.seller_phone && <small>{product.seller_phone}</small>}
+          </strong>
+          {(product.store_count ?? 1) > 1 ? (
+            <small>Open product details to review each store offer</small>
+          ) : (
+            product.seller_phone && <small>{product.seller_phone}</small>
+          )}
         </div>
       </div>
     </a>

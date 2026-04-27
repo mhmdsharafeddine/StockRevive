@@ -1520,6 +1520,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  margin-bottom: 16px;
 }
 
 .retail-card__meta span {
@@ -1528,8 +1529,31 @@ button {
   gap: 6px;
 }
 
+.retail-card__location {
+  line-height: 1.45;
+}
+
 .retail-card__meta strong {
   color: var(--green-bright);
+}
+
+.retail-card__seller {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.retail-card__seller strong {
+  color: white;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.retail-card__seller small {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .retail-card__trend {
@@ -1919,6 +1943,11 @@ button {
   display: grid;
   align-items: start;
   justify-items: stretch;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .store-offers-section {
@@ -5642,6 +5671,59 @@ html[data-theme="light"] .rising-item:hover {
   background: #fbfdff;
 }
 
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(54px) scale(0.985);
+  filter: saturate(0.9);
+  transition:
+    opacity 720ms cubic-bezier(0.2, 0.7, 0.16, 1),
+    transform 720ms cubic-bezier(0.2, 0.7, 0.16, 1),
+    filter 720ms cubic-bezier(0.2, 0.7, 0.16, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: saturate(1);
+}
+
+.scroll-reveal .section-header,
+.scroll-reveal .product-preview__header,
+.scroll-reveal .metrics-grid,
+.scroll-reveal .feature-grid,
+.scroll-reveal .product-grid,
+.scroll-reveal .steps-grid,
+.scroll-reveal .cta-section__content {
+  transition:
+    transform 760ms cubic-bezier(0.2, 0.7, 0.16, 1),
+    opacity 760ms cubic-bezier(0.2, 0.7, 0.16, 1);
+}
+
+.scroll-reveal:not(.scroll-reveal--visible) .section-header,
+.scroll-reveal:not(.scroll-reveal--visible) .product-preview__header,
+.scroll-reveal:not(.scroll-reveal--visible) .metrics-grid,
+.scroll-reveal:not(.scroll-reveal--visible) .feature-grid,
+.scroll-reveal:not(.scroll-reveal--visible) .product-grid,
+.scroll-reveal:not(.scroll-reveal--visible) .steps-grid,
+.scroll-reveal:not(.scroll-reveal--visible) .cta-section__content {
+  opacity: 0;
+  transform: translateY(26px);
+}
+
+.scroll-reveal--visible .section-header,
+.scroll-reveal--visible .product-preview__header,
+.scroll-reveal--visible .cta-section__content {
+  transition-delay: 90ms;
+}
+
+.scroll-reveal--visible .metrics-grid,
+.scroll-reveal--visible .feature-grid,
+.scroll-reveal--visible .product-grid,
+.scroll-reveal--visible .steps-grid {
+  transition-delay: 160ms;
+}
+
 @keyframes buttonPulse {
   0%,
   100% {
@@ -5773,6 +5855,12 @@ html[data-theme="light"] .rising-item:hover {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 1ms !important;
+  }
+
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
 

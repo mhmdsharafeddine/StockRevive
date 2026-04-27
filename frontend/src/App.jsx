@@ -9,6 +9,7 @@ import Hero from "./components/Hero.jsx";
 import HowItWorks from "./components/HowItWorks.jsx";
 import IntelligentSection from "./components/IntelligentSection.jsx";
 import ProductPreview from "./components/ProductPreview.jsx";
+import ScrollReveal from "./components/ScrollReveal.jsx";
 import Snackbar from "./components/Snackbar.jsx";
 import StatsSection from "./components/StatsSection.jsx";
 import {
@@ -50,12 +51,24 @@ function HomePage({ toast, onCloseToast }) {
       <Header activePage="Home" />
       <main>
         <Hero />
-        <StatsSection metrics={metrics} />
-        <FeaturesSection features={platformFeatures} />
-        <IntelligentSection features={intelligentFeatures} />
-        <ProductPreview products={products} />
-        <HowItWorks steps={steps} />
-        <CtaSection />
+        <ScrollReveal delay={40}>
+          <StatsSection metrics={metrics} />
+        </ScrollReveal>
+        <ScrollReveal delay={70}>
+          <FeaturesSection features={platformFeatures} />
+        </ScrollReveal>
+        <ScrollReveal delay={90}>
+          <IntelligentSection features={intelligentFeatures} />
+        </ScrollReveal>
+        <ScrollReveal delay={110}>
+          <ProductPreview products={products} />
+        </ScrollReveal>
+        <ScrollReveal delay={130}>
+          <HowItWorks steps={steps} />
+        </ScrollReveal>
+        <ScrollReveal delay={150}>
+          <CtaSection />
+        </ScrollReveal>
       </main>
       <Footer />
       <Snackbar toast={toast} onClose={onCloseToast} />
