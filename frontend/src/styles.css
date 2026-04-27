@@ -14,7 +14,25 @@
   --green-dark: #003b1b;
   --green-deep: #00270f;
   --accent: #00c853;
-  --danger: #ff426b;
+  --danger: #ff3555;
+  --danger-rgb: 255, 53, 85;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ecf3f8;
+  --panel: #ffffff;
+  --panel-soft: #f3f7fb;
+  --line: rgba(18, 34, 54, 0.12);
+  --muted: #5b7084;
+  --text: #132537;
+  --green: #00b050;
+  --green-bright: #009645;
+  --green-dark: #d9f4e0;
+  --green-deep: #e3f3e8;
+  --accent: #00b050;
+  --danger: #ff3054;
+  --danger-rgb: 255, 48, 84;
 }
 
 * {
@@ -508,7 +526,7 @@ button {
 }
 
 .button--light {
-  color: #007f35;
+  color: #00a84a;
   background: #fff;
 }
 
@@ -528,7 +546,7 @@ button {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background-image: url("/assets/warehouse-hero.png");
+  background-image: url("./data/homepage.jpeg");
   background-size: cover;
   background-position: center;
 }
@@ -536,7 +554,9 @@ button {
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.58);
+  background:
+    linear-gradient(180deg, rgba(3, 9, 20, 0.3) 0%, rgba(3, 9, 20, 0.54) 60%, rgba(3, 9, 20, 0.72) 100%),
+    radial-gradient(circle at top left, rgba(24, 224, 111, 0.12), transparent 42%);
 }
 
 .hero__content {
@@ -559,20 +579,22 @@ button {
 }
 
 .hero h1 {
-  max-width: 800px;
-  margin: 48px auto 34px;
+  max-width: 980px;
+  margin: 0 auto 30px;
   font-size: clamp(54px, 5vw, 86px);
-  line-height: 1.28;
+  line-height: 1.12;
   font-weight: 900;
-  letter-spacing: 0;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .hero p {
-  max-width: 900px;
+  max-width: 860px;
   margin: 0 auto;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: clamp(21px, 2vw, 29px);
-  line-height: 1.42;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.5;
+  text-wrap: balance;
 }
 
 .hero__actions {
@@ -5146,6 +5168,478 @@ button {
   color: rgba(194, 208, 223, 0.72);
   font-size: 12px;
   line-height: 1.35;
+}
+
+html[data-theme="light"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+html[data-theme="light"] .site-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(18, 34, 54, 0.08);
+  box-shadow: 0 12px 30px rgba(18, 34, 54, 0.05);
+}
+
+html[data-theme="light"] .brand__text,
+html[data-theme="light"] .nav__link--active,
+html[data-theme="light"] .nav__link:hover,
+html[data-theme="light"] .login-link:hover {
+  color: var(--green-bright);
+}
+
+html[data-theme="light"] .nav__link,
+html[data-theme="light"] .login-link,
+html[data-theme="light"] .icon-button,
+html[data-theme="light"] .user-chip {
+  color: #41586b;
+}
+
+html[data-theme="light"] .icon-button:hover {
+  color: var(--green-bright);
+  background: rgba(19, 37, 55, 0.06);
+}
+
+html[data-theme="light"] .logout-button,
+html[data-theme="light"] .my-listings-link,
+html[data-theme="light"] .settings-button,
+html[data-theme="light"] .notifications__button {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(18, 34, 54, 0.12);
+}
+
+html[data-theme="light"] .logout-button:hover,
+html[data-theme="light"] .my-listings-link:hover,
+html[data-theme="light"] .settings-button:hover,
+html[data-theme="light"] .notifications__button:hover {
+  border-color: rgba(0, 176, 80, 0.42);
+  background: rgba(0, 176, 80, 0.08);
+}
+
+html[data-theme="light"] .stats-section,
+html[data-theme="light"] .product-preview,
+html[data-theme="light"] .retail-page,
+html[data-theme="light"] .product-detail-page,
+html[data-theme="light"] .footer {
+  background: var(--bg);
+}
+
+html[data-theme="light"] .section {
+  background: #eef4f8;
+}
+
+html[data-theme="light"] .section--intelligent {
+  background: #f7fbfd;
+}
+
+html[data-theme="light"] .how-it-works {
+  background: var(--green-deep);
+}
+
+html[data-theme="light"] .cta-section {
+  background: linear-gradient(135deg, #00a84c, #14bc61);
+}
+
+html[data-theme="light"] .hero__overlay {
+  background:
+    linear-gradient(180deg, rgba(3, 9, 20, 0.14) 0%, rgba(3, 9, 20, 0.28) 60%, rgba(3, 9, 20, 0.42) 100%),
+    radial-gradient(circle at top left, rgba(24, 224, 111, 0.1), transparent 42%);
+}
+
+html[data-theme="light"] .hero h1,
+html[data-theme="light"] .hero p {
+  color: #fff;
+}
+
+html[data-theme="light"] .footer__bottom {
+  border-top-color: rgba(18, 34, 54, 0.08);
+}
+
+html[data-theme="light"] .notifications__panel,
+html[data-theme="light"] .metric-card,
+html[data-theme="light"] .feature-card,
+html[data-theme="light"] .product-card,
+html[data-theme="light"] .retail-tools,
+html[data-theme="light"] .retail-card,
+html[data-theme="light"] .listing-modal__panel,
+html[data-theme="light"] .product-summary-card,
+html[data-theme="light"] .store-offer-card,
+html[data-theme="light"] .my-listing-card,
+html[data-theme="light"] .my-listings-empty,
+html[data-theme="light"] .orders-list-panel,
+html[data-theme="light"] .order-detail-panel,
+html[data-theme="light"] .orders-empty-state,
+html[data-theme="light"] .settings-card,
+html[data-theme="light"] .wholesale-metric,
+html[data-theme="light"] .wholesale-tools,
+html[data-theme="light"] .wholesale-card,
+html[data-theme="light"] .insights-metric,
+html[data-theme="light"] .insights-panel,
+html[data-theme="light"] .rising-item,
+html[data-theme="light"] .stock-metrics article,
+html[data-theme="light"] .stock-tools,
+html[data-theme="light"] .stock-card,
+html[data-theme="light"] .stock-empty,
+html[data-theme="light"] .auth-copy,
+html[data-theme="light"] .auth-card {
+  background: var(--panel);
+  border-color: var(--line);
+  box-shadow: 0 18px 48px rgba(18, 34, 54, 0.08);
+}
+
+html[data-theme="light"] .metric-card:hover,
+html[data-theme="light"] .feature-card:hover,
+html[data-theme="light"] .product-card:hover,
+html[data-theme="light"] .retail-card:hover,
+html[data-theme="light"] .product-summary-card:hover,
+html[data-theme="light"] .product-quick-card:hover,
+html[data-theme="light"] .store-offer-card:hover,
+html[data-theme="light"] .my-listing-card:hover,
+html[data-theme="light"] .wholesale-metric:hover,
+html[data-theme="light"] .wholesale-tools:hover,
+html[data-theme="light"] .wholesale-card:hover,
+html[data-theme="light"] .insights-metric:hover,
+html[data-theme="light"] .insights-panel:hover,
+html[data-theme="light"] .rising-item:hover,
+html[data-theme="light"] .stock-metrics article:hover,
+html[data-theme="light"] .stock-tools:hover,
+html[data-theme="light"] .stock-card:hover,
+html[data-theme="light"] .auth-card:hover {
+  background: #fbfdff;
+  box-shadow: 0 24px 60px rgba(18, 34, 54, 0.12);
+}
+
+html[data-theme="light"] .product-quick-card,
+html[data-theme="light"] .worth-strip,
+html[data-theme="light"] .decision-note--business,
+html[data-theme="light"] .my-listing-request,
+html[data-theme="light"] .order-row:hover,
+html[data-theme="light"] .order-row--active,
+html[data-theme="light"] .order-completed-note {
+  border-color: rgba(0, 176, 80, 0.18);
+  background: linear-gradient(135deg, rgba(0, 176, 80, 0.12), rgba(0, 176, 80, 0.04));
+}
+
+html[data-theme="light"] .retail-search,
+html[data-theme="light"] .retail-tool-button,
+html[data-theme="light"] .retail-icon-button,
+html[data-theme="light"] .retail-category,
+html[data-theme="light"] .order-row,
+html[data-theme="light"] .custom-select > button,
+html[data-theme="light"] .listing-form input,
+html[data-theme="light"] .listing-form select,
+html[data-theme="light"] .listing-form textarea,
+html[data-theme="light"] .settings-field input,
+html[data-theme="light"] .auth-provider-grid button,
+html[data-theme="light"] .account-toggle__option,
+html[data-theme="light"] .auth-field input,
+html[data-theme="light"] .stock-toggle,
+html[data-theme="light"] .wholesale-tab,
+html[data-theme="light"] .store-offer-card__actions button,
+html[data-theme="light"] .wholesale-card__actions button {
+  color: var(--text);
+  background: #f8fbfe;
+  border-color: rgba(18, 34, 54, 0.12);
+}
+
+html[data-theme="light"] .retail-search input,
+html[data-theme="light"] .listing-form input,
+html[data-theme="light"] .listing-form select,
+html[data-theme="light"] .listing-form textarea,
+html[data-theme="light"] .settings-field input,
+html[data-theme="light"] .auth-field input,
+html[data-theme="light"] .custom-select > button {
+  color: var(--text);
+}
+
+html[data-theme="light"] .retail-search input::placeholder,
+html[data-theme="light"] .listing-form input::placeholder,
+html[data-theme="light"] .listing-form textarea::placeholder,
+html[data-theme="light"] .settings-field input::placeholder,
+html[data-theme="light"] .auth-field input::placeholder {
+  color: rgba(91, 112, 132, 0.78);
+}
+
+html[data-theme="light"] .retail-tool-button:hover,
+html[data-theme="light"] .retail-icon-button:hover,
+html[data-theme="light"] .retail-category:hover,
+html[data-theme="light"] .retail-icon-button--active,
+html[data-theme="light"] .stock-toggle:hover,
+html[data-theme="light"] .stock-toggle--active,
+html[data-theme="light"] .wholesale-tab:hover,
+html[data-theme="light"] .wholesale-tab--active,
+html[data-theme="light"] .auth-provider-grid button:hover,
+html[data-theme="light"] .account-toggle__option:hover,
+html[data-theme="light"] .store-offer-card__actions button:hover:not(:disabled),
+html[data-theme="light"] .wholesale-card__actions button:hover {
+  background: rgba(0, 176, 80, 0.1);
+  border-color: rgba(0, 176, 80, 0.34);
+}
+
+html[data-theme="light"] .custom-select__menu,
+html[data-theme="light"] .listing-form option {
+  background: #ffffff;
+  border-color: rgba(18, 34, 54, 0.12);
+  color: var(--text);
+  box-shadow: 0 18px 50px rgba(18, 34, 54, 0.12);
+}
+
+html[data-theme="light"] .custom-select__option {
+  color: var(--text);
+}
+
+html[data-theme="light"] .custom-select__option:hover,
+html[data-theme="light"] .custom-select__option--active {
+  background: rgba(0, 176, 80, 0.1);
+}
+
+html[data-theme="light"] .wholesale-price-box,
+html[data-theme="light"] .rising-item__summary,
+html[data-theme="light"] .order-detail-grid article,
+html[data-theme="light"] .order-product-summary,
+html[data-theme="light"] .order-cost-card,
+html[data-theme="light"] .my-listing-card__stats div,
+html[data-theme="light"] .stock-card__stats div,
+html[data-theme="light"] .decision-note,
+html[data-theme="light"] .notifications__item,
+html[data-theme="light"] .product-card__visual,
+html[data-theme="light"] .retail-card__media,
+html[data-theme="light"] .my-listing-card__media,
+html[data-theme="light"] .product-summary-card__media {
+  background: #eef4f8;
+  border-color: rgba(18, 34, 54, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(18, 34, 54, 0.03);
+}
+
+html[data-theme="light"] .wholesale-card:hover .wholesale-price-box,
+html[data-theme="light"] .rising-item:hover .rising-item__summary,
+html[data-theme="light"] .notifications__item--unread {
+  background: #e8f5ec;
+}
+
+html[data-theme="light"] .snackbar {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(0, 176, 80, 0.24);
+  box-shadow: 0 18px 48px rgba(18, 34, 54, 0.14);
+}
+
+html[data-theme="light"] .snackbar button {
+  color: #566b7f;
+}
+
+html[data-theme="light"] .snackbar button:hover {
+  color: var(--text);
+  background: rgba(19, 37, 55, 0.06);
+}
+
+html[data-theme="light"] .auth-page::before {
+  background: rgba(236, 243, 248, 0.78);
+}
+
+html[data-theme="light"] .auth-copy,
+html[data-theme="light"] .auth-card {
+  backdrop-filter: blur(18px);
+}
+
+html[data-theme="light"] .auth-copy {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+html[data-theme="light"] .auth-card {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+html[data-theme="light"] :is(
+  .notifications__header strong,
+  .notifications__item strong,
+  .hero h1,
+  .metric-card h3,
+  .feature-card h3,
+  .product-card h3,
+  .section-header h2,
+  .product-preview h2,
+  .worth-strip h2,
+  .retail-hero h1,
+  .retail-card h3,
+  .listing-modal__header h2,
+  .product-summary-card h1,
+  .product-quick-card h2,
+  .store-offers-section h2,
+  .store-offer-card__title h3,
+  .my-listings-hero h1,
+  .my-listings-section__header h2,
+  .my-listing-card h2,
+  .my-listing-card h3,
+  .my-listings-empty h2,
+  .orders-hero h1,
+  .orders-list-panel h2,
+  .order-detail-panel__header h2,
+  .order-detail-grid h3,
+  .order-cost-card h3,
+  .settings-hero h1,
+  .settings-card__section h2,
+  .wholesale-hero h1,
+  .wholesale-metric h2,
+  .wholesale-card__title h2,
+  .insights-hero h1,
+  .insights-panel h2,
+  .insights-panel__heading h2,
+  .rising-item h3,
+  .stock-hero h1,
+  .stock-card__top h2,
+  .stock-empty h2,
+  .auth-copy h1,
+  .auth-card__header h2
+) {
+  color: var(--text);
+}
+
+html[data-theme="light"] :is(
+  .metric-card strong,
+  .product-card__bottom strong,
+  .retail-card__rating strong,
+  .retail-card__price strong,
+  .product-summary-card__price strong,
+  .product-quick-card__decision strong,
+  .product-quick-card__metric strong,
+  .store-offer-card__decision strong,
+  .store-offer-card__actions strong,
+  .my-listing-card__stats strong,
+  .my-listing-request strong,
+  .order-detail-grid strong,
+  .order-product-summary strong,
+  .order-cost-card strong,
+  .wholesale-price-box strong,
+  .insights-metric strong,
+  .rising-item__stats strong,
+  .rising-item__summary strong,
+  .stock-metrics strong,
+  .stock-card__stats strong
+) {
+  color: var(--text);
+}
+
+html[data-theme="light"] :is(
+  .notifications__header span,
+  .notifications__item span,
+  .notifications__item small,
+  .notifications__item p,
+  .section-header p,
+  .feature-card p,
+  .product-preview p,
+  .footer p,
+  .footer a:not(.brand),
+  .footer__bottom,
+  .retail-hero p,
+  .retail-card p,
+  .retail-card__price span,
+  .retail-card__meta span,
+  .product-summary-card p,
+  .product-summary-card__meta,
+  .product-summary-card__price span,
+  .store-offer-card__info p,
+  .store-offer-card__decision p,
+  .my-listings-hero p,
+  .my-listings-section__header p,
+  .my-listing-card p,
+  .my-listing-card__details span,
+  .orders-hero p,
+  .order-row small,
+  .orders-empty-text,
+  .order-detail-grid span,
+  .order-detail-grid p,
+  .order-product-summary span,
+  .order-cost-card p,
+  .settings-hero p,
+  .settings-field span,
+  .settings-field small,
+  .wholesale-hero p,
+  .wholesale-metric p,
+  .wholesale-card__main > p,
+  .insights-hero p,
+  .insights-metric p,
+  .rising-item p,
+  .stock-hero p,
+  .stock-card__top p,
+  .stock-card > p,
+  .stock-card__footer span,
+  .stock-empty p,
+  .auth-copy p,
+  .auth-card__header p,
+  .auth-switch,
+  .auth-row,
+  .auth-field small,
+  .account-toggle__option small,
+  .password-strength__top,
+  .password-strength p
+) {
+  color: var(--muted);
+}
+
+html[data-theme="light"] .notifications__header button,
+html[data-theme="light"] .notifications__item button,
+html[data-theme="light"] .my-listing-card__actions button,
+html[data-theme="light"] .my-listing-card__link {
+  color: var(--text);
+  background: rgba(0, 176, 80, 0.08);
+  border-color: rgba(0, 176, 80, 0.26);
+}
+
+html[data-theme="light"] .notifications__item .notifications__delete,
+html[data-theme="light"] .order-row-delete,
+html[data-theme="light"] .stock-danger-button,
+html[data-theme="light"] .stock-card__trash,
+html[data-theme="light"] .my-listing-card__trash {
+  background: rgba(var(--danger-rgb), 0.1);
+  border-color: rgba(var(--danger-rgb), 0.32);
+  color: var(--danger);
+}
+
+html[data-theme="light"] .auth-field__control button {
+  color: #607486;
+}
+
+html[data-theme="light"] .auth-field__control button:hover {
+  color: var(--text);
+  background: rgba(19, 37, 55, 0.06);
+}
+
+html[data-theme="light"] .chart-grid {
+  stroke: rgba(18, 34, 54, 0.16);
+}
+
+html[data-theme="light"] .area-axis,
+html[data-theme="light"] .bar-grid,
+html[data-theme="light"] .bar-group small {
+  color: rgba(18, 34, 54, 0.45);
+}
+
+html[data-theme="light"] .bar-grid span,
+html[data-theme="light"] .rising-item__stats,
+html[data-theme="light"] .retail-card__price,
+html[data-theme="light"] .product-quick-card__metric,
+html[data-theme="light"] .my-listings-section__header,
+html[data-theme="light"] .order-cost-card p:last-child {
+  border-color: rgba(18, 34, 54, 0.1);
+}
+
+html[data-theme="light"] .region-pie {
+  border-color: rgba(18, 34, 54, 0.14);
+  box-shadow: 0 18px 44px rgba(18, 34, 54, 0.08);
+}
+
+html[data-theme="light"] .region-row i {
+  background: #d3dee8;
+}
+
+html[data-theme="light"] .store-offer-card:hover,
+html[data-theme="light"] .wholesale-card:hover,
+html[data-theme="light"] .insights-metric:hover,
+html[data-theme="light"] .insights-panel:hover,
+html[data-theme="light"] .rising-item:hover {
+  background: #fbfdff;
 }
 
 @keyframes buttonPulse {

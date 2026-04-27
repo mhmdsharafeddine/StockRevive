@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Bell, Boxes, BriefcaseBusiness, CheckCheck, ClipboardList, LogOut, Settings, Sun, Trash2 } from "lucide-react";
+import { Bell, Boxes, BriefcaseBusiness, CheckCheck, ClipboardList, LogOut, Settings, Trash2 } from "lucide-react";
 
 import {
   clearAuthSession,
@@ -197,9 +197,6 @@ export default function Header({ activePage = "Home" }) {
           ))}
         </nav>
         <div className="header-actions">
-          <button className="icon-button" type="button" aria-label="Toggle theme">
-            <Sun size={20} strokeWidth={2.1} />
-          </button>
           {user ? (
             <>
               <NotificationsCenter />

@@ -1,0 +1,109 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <circle cx="1280" cy="156" r="188" fill="#F7B24D" fill-opacity="0.18"/>
+  <circle cx="238" cy="210" r="144" fill="#4DD8B0" fill-opacity="0.16"/>
+  <circle cx="1420" cy="806" r="240" fill="#88A8FF" fill-opacity="0.14"/>
+  <path d="M0 771C196 664 385 650 534 690C666 726 732 836 896 852C1070 870 1240 756 1401 736C1494 724 1560 733 1600 747V1000H0V771Z" fill="url(#floor)"/>
+  <g opacity="0.48">
+    <path d="M159 153H499" stroke="#D7F3EA" stroke-width="2" stroke-linecap="round"/>
+    <path d="M1188 218H1408" stroke="#FFF3DA" stroke-width="2" stroke-linecap="round"/>
+    <path d="M1218 248H1510" stroke="#FFF3DA" stroke-width="2" stroke-linecap="round"/>
+    <path d="M100 760H468" stroke="#C3D4FF" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#shadowSoft)">
+    <rect x="181" y="246" width="338" height="414" rx="28" fill="#F9FCFF" fill-opacity="0.94"/>
+    <rect x="209" y="282" width="282" height="178" rx="22" fill="url(#cardScreen)"/>
+    <rect x="209" y="489" width="168" height="20" rx="10" fill="#17344B" fill-opacity="0.9"/>
+    <rect x="209" y="526" width="242" height="14" rx="7" fill="#87A2B7"/>
+    <rect x="209" y="556" width="198" height="14" rx="7" fill="#A7BBCB"/>
+    <rect x="209" y="601" width="116" height="34" rx="17" fill="#16B364"/>
+    <rect x="337" y="601" width="124" height="34" rx="17" fill="#E6EEF5"/>
+    <circle cx="421" cy="373" r="42" fill="#FFF" fill-opacity="0.94"/>
+    <path d="M403 373L417 387L441 358" stroke="#16B364" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g filter="url(#shadowCard)">
+    <rect x="558" y="190" width="688" height="458" rx="34" fill="#0C1828" fill-opacity="0.9"/>
+    <rect x="586" y="222" width="632" height="402" rx="28" fill="url(#panel)"/>
+    <rect x="626" y="270" width="252" height="150" rx="24" fill="#F4F8FC"/>
+    <rect x="904" y="270" width="274" height="150" rx="24" fill="#FFF5E9"/>
+    <rect x="626" y="448" width="552" height="124" rx="24" fill="#EEF4FA"/>
+    <rect x="653" y="297" width="96" height="96" rx="20" fill="#D7F3EA"/>
+    <rect x="760" y="305" width="89" height="18" rx="9" fill="#10324A"/>
+    <rect x="760" y="338" width="67" height="14" rx="7" fill="#6F899D"/>
+    <rect x="760" y="364" width="78" height="14" rx="7" fill="#91A6B7"/>
+    <rect x="932" y="298" width="92" height="92" rx="22" fill="#FFE0A8"/>
+    <path d="M957 335H1000" stroke="#A25B00" stroke-width="12" stroke-linecap="round"/>
+    <path d="M978 314V356" stroke="#A25B00" stroke-width="12" stroke-linecap="round"/>
+    <rect x="1049" y="305" width="95" height="18" rx="9" fill="#623500"/>
+    <rect x="1049" y="338" width="72" height="14" rx="7" fill="#A36E2D"/>
+    <rect x="1049" y="364" width="88" height="14" rx="7" fill="#C18C4C"/>
+    <rect x="653" y="475" width="146" height="18" rx="9" fill="#0F2D45"/>
+    <rect x="653" y="510" width="496" height="16" rx="8" fill="#95AABC"/>
+    <rect x="653" y="540" width="361" height="16" rx="8" fill="#B1C1CE"/>
+    <rect x="1044" y="470" width="105" height="40" rx="20" fill="#16B364"/>
+    <rect x="653" y="596" width="198" height="10" rx="5" fill="#B2C3D0"/>
+  </g>
+  <g filter="url(#shadowSoft)">
+    <rect x="1126" y="116" width="232" height="142" rx="28" fill="#FDFDFD" fill-opacity="0.94"/>
+    <rect x="1153" y="146" width="60" height="60" rx="18" fill="#DDF5E7"/>
+    <path d="M1172 176H1194" stroke="#169C57" stroke-width="10" stroke-linecap="round"/>
+    <path d="M1183 165V187" stroke="#169C57" stroke-width="10" stroke-linecap="round"/>
+    <rect x="1234" y="152" width="84" height="18" rx="9" fill="#15334B"/>
+    <rect x="1234" y="184" width="60" height="14" rx="7" fill="#7B91A3"/>
+    <rect x="1153" y="221" width="174" height="12" rx="6" fill="#B9C7D2"/>
+  </g>
+  <g filter="url(#shadowSoft)">
+    <rect x="1040" y="678" width="292" height="176" rx="32" fill="#FCFEFF" fill-opacity="0.94"/>
+    <rect x="1074" y="714" width="110" height="110" rx="28" fill="#E8EEFF"/>
+    <path d="M1107 754C1107 736.327 1121.33 722 1139 722H1145C1162.67 722 1177 736.327 1177 754V784C1177 801.673 1162.67 816 1145 816H1139C1121.33 816 1107 801.673 1107 784V754Z" fill="#7C96FF"/>
+    <rect x="1210" y="724" width="84" height="18" rx="9" fill="#17334B"/>
+    <rect x="1210" y="758" width="55" height="14" rx="7" fill="#7F94A6"/>
+    <rect x="1210" y="785" width="74" height="14" rx="7" fill="#A2B4C3"/>
+    <rect x="1074" y="839" width="220" height="12" rx="6" fill="#C0CCD5"/>
+  </g>
+  <g opacity="0.95">
+    <path d="M345 775C386.974 775 421 741.198 421 699.5C421 657.802 386.974 624 345 624C303.026 624 269 657.802 269 699.5C269 741.198 303.026 775 345 775Z" fill="#153B2C"/>
+    <path d="M345 620C366.539 620 384 602.763 384 581.5C384 560.237 366.539 543 345 543C323.461 543 306 560.237 306 581.5C306 602.763 323.461 620 345 620Z" fill="#FFD6B3"/>
+    <path d="M299 580C308 540 333 522 366 522C394 522 419 539 430 580C410 563 385 555 357 555C335 555 313 563 299 580Z" fill="#112D4E"/>
+    <rect x="297" y="660" width="96" height="18" rx="9" fill="#2AE089"/>
+  </g>
+  <defs>
+    <filter id="shadowSoft" x="141" y="76" width="1257" height="818" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="20"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.054902 0 0 0 0 0.105882 0 0 0 0.22 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_hero"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_hero" result="shape"/>
+    </filter>
+    <filter id="shadowCard" x="518" y="150" width="768" height="538" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0196078 0 0 0 0 0.0509804 0 0 0 0 0.113725 0 0 0 0.38 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_panel"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_panel" result="shape"/>
+    </filter>
+    <linearGradient id="bg" x1="164" y1="72" x2="1426" y2="908" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E2435"/>
+      <stop offset="0.48" stop-color="#133655"/>
+      <stop offset="1" stop-color="#1B4C57"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="800" y1="680" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071624" stop-opacity="0"/>
+      <stop offset="1" stop-color="#06121D"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="586" y1="222" x2="1218" y2="624" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9FCFF"/>
+      <stop offset="1" stop-color="#EAF1F7"/>
+    </linearGradient>
+    <linearGradient id="cardScreen" x1="209" y1="282" x2="491" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E4F7FF"/>
+      <stop offset="1" stop-color="#B7D7F9"/>
+    </linearGradient>
+  </defs>
+</svg>
