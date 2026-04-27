@@ -1,6 +1,7 @@
 import csv
 import io
 import zipfile
+from datetime import date
 from decimal import Decimal, InvalidOperation
 from xml.etree import ElementTree
 
@@ -75,6 +76,7 @@ STOCK_IMPORT_HEADERS = [
     "condition",
     "depot_location",
     "description",
+    "received_at",
 ]
 
 
@@ -102,6 +104,16 @@ def parse_int(value, default=0):
         return max(int(float(str(value or default).strip())), 0)
     except (TypeError, ValueError):
         return default
+
+
+def parse_date_value(value):
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    try:
+        return date.fromisoformat(raw)
+    except ValueError:
+        return None
 
 
 def normalize_condition(value):
@@ -855,6 +867,7 @@ def upload_stock_items(request):
             depot_location=str(normalized.get("depot_location", "")).strip(),
             description=str(normalized.get("description", "")).strip(),
             source_file=upload.name[:180],
+            received_at=parse_date_value(normalized.get("received_at")),
         )
         imported.append(item)
 
@@ -944,6 +957,31 @@ def create_stock_listing(request, stock_item_id):
         )
 
     return Response({"listing_type": "Choose either 'retail' or 'wholesale'."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_stock_item(request, stock_item_id):
+    business_error = require_business(request)
+    if business_error:
+        return business_error
+
+    deleted_count, _ = StockItem.objects.filter(pk=stock_item_id, owner=request.user).delete()
+    if not deleted_count:
+        return Response({"detail": "Stock item not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_all_stock_items(request):
+    business_error = require_business(request)
+    if business_error:
+        return business_error
+
+    deleted_count, _ = StockItem.objects.filter(owner=request.user).delete()
+    return Response({"deleted_count": deleted_count}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])

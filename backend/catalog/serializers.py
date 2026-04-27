@@ -38,6 +38,7 @@ class StockItemSerializer(serializers.ModelSerializer):
             "description",
             "source_file",
             "store",
+            "received_at",
             "created_at",
             "updated_at",
         ]

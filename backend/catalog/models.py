@@ -341,6 +341,7 @@ class StockItem(models.Model):
     depot_location = models.CharField(max_length=120, blank=True)
     description = models.TextField(blank=True)
     source_file = models.CharField(max_length=180, blank=True)
+    received_at = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
