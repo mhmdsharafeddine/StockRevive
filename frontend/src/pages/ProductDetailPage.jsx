@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, ArrowLeft, Box, MapPin, Navigation, PackageCheck, Phone, ShieldCheck, Store, Truck } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Box, Clock3, MapPin, Navigation, PackageCheck, Phone, ShieldCheck, Store, Truck } from "lucide-react";
 
 import { createListingRequest, fetchProductDeals, getAuthUser } from "../api/homepage.js";
 import Footer from "../components/Footer.jsx";
@@ -76,6 +76,18 @@ function decorateOffersWithAnomalies(offers) {
   });
 }
 
+function recommendationClass(status) {
+  if (status === "buy_now") return "decision-pill decision-pill--buy";
+  if (status === "price_drop") return "decision-pill decision-pill--drop";
+  return "decision-pill decision-pill--wait";
+}
+
+function waitIndicatorClass(status) {
+  if (status === "buy_now") return "wait-indicator wait-indicator--buy";
+  if (status === "price_drop") return "wait-indicator wait-indicator--drop";
+  return "wait-indicator wait-indicator--wait";
+}
+
 export default function ProductDetailPage({ productId }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
@@ -89,6 +101,12 @@ export default function ProductDetailPage({ productId }) {
 
   const product = data?.product;
   const offers = data?.offers ?? [];
+  const recommendation = data?.recommendation ?? {
+    wait_status: product?.wait_status ?? "worth_waiting",
+    wait_label: product?.wait_label ?? "Worth Waiting",
+    wait_message: product?.wait_message ?? "Supply looks stable, so there is no strong rush to buy today.",
+    wait_reason: product?.wait_reason ?? "Stock looks balanced with current demand.",
+  };
   const lowestPrice = data?.stats?.lowest_price ?? product?.price;
   const image = product?.photo_url || product?.image || product?.image_url;
 
@@ -197,15 +215,20 @@ export default function ProductDetailPage({ productId }) {
 
               <aside className="product-quick-card">
                 <h2>Marketplace Summary</h2>
-                <div>
+                <div className={`${waitIndicatorClass(recommendation.wait_status)} product-quick-card__decision`}>
+                  <span className={recommendationClass(recommendation.wait_status)}>{recommendation.wait_label}</span>
+                  <strong>{recommendation.wait_message}</strong>
+                  <small>{recommendation.wait_reason}</small>
+                </div>
+                <div className="product-quick-card__metric">
                   <span>Lowest price</span>
                   <strong>${formatPrice(lowestPrice)}</strong>
                 </div>
-                <div>
+                <div className="product-quick-card__metric">
                   <span>Stores listing it</span>
                   <strong>{offers.length}</strong>
                 </div>
-                <div>
+                <div className="product-quick-card__metric">
                   <span>Total stock</span>
                   <strong>{data?.stats?.total_quantity ?? product.quantity}</strong>
                 </div>
@@ -237,7 +260,18 @@ export default function ProductDetailPage({ productId }) {
                           {offer.quantity} in stock
                         </span>
                         <span>{offer.condition_label}</span>
+                        {offer.wait_label && <span className={recommendationClass(offer.wait_status)}>{offer.wait_label}</span>}
                       </div>
+                      {offer.wait_message && (
+                        <div className={`${waitIndicatorClass(offer.wait_status)} store-offer-card__decision`}>
+                          <span>
+                            <Clock3 size={15} />
+                            Worth Waiting Indicator
+                          </span>
+                          <strong>{offer.wait_message}</strong>
+                          <p>{offer.wait_reason}</p>
+                        </div>
+                      )}
                       {offer.anomaly_warning && (
                         <div className="store-offer-card__anomaly" role="note" aria-label={`${offer.anomaly_warning.headline}: ${offer.anomaly_warning.summary}`}>
                           <div className="store-offer-card__anomaly-title">

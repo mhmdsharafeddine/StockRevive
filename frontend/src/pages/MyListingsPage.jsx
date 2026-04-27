@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, CalendarClock, Eye, PackageCheck, Pencil, Phone, Plus, Save, Store, Trash2, Upload, X } from "lucide-react";
+import { Box, CalendarClock, Clock3, Eye, PackageCheck, Pencil, Phone, Plus, Save, Store, Trash2, Upload, X } from "lucide-react";
 
 import {
   deleteProductListing,
@@ -65,6 +65,10 @@ const categories = [
   "Monitors",
   "Peripherals",
 ];
+
+function sellerRecommendationClass(tone) {
+  return tone === "hold" ? "decision-pill decision-pill--hold" : "decision-pill decision-pill--sell";
+}
 
 function EditRetailListingModal({ listing, onClose, onSaved }) {
   const [preview, setPreview] = useState(listing.photo_url || listing.image || listing.image_url || "");
@@ -463,6 +467,17 @@ export default function MyListingsPage() {
                         </div>
                       </div>
 
+                      <div className="decision-note">
+                        <span>
+                          <Clock3 size={15} />
+                          Business timing signal
+                        </span>
+                        <div className="decision-note__summary">
+                          <strong className={sellerRecommendationClass(listing.seller_recommendation_tone)}>{listing.seller_recommendation_label}</strong>
+                          <p>{listing.seller_recommendation_message}</p>
+                        </div>
+                      </div>
+
                       <div className="my-listing-card__details">
                         <span>
                           <Store size={16} />
@@ -556,6 +571,17 @@ export default function MyListingsPage() {
                       <div>
                         <small>Orders</small>
                         <strong>{listing.pending_orders_count} pending</strong>
+                      </div>
+                    </div>
+
+                    <div className="decision-note">
+                      <span>
+                        <Clock3 size={15} />
+                        Business timing signal
+                      </span>
+                      <div className="decision-note__summary">
+                        <strong className={sellerRecommendationClass(listing.seller_recommendation_tone)}>{listing.seller_recommendation_label}</strong>
+                        <p>{listing.seller_recommendation_message}</p>
                       </div>
                     </div>
 

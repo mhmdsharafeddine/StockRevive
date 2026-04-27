@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  Clock3,
   Cpu,
   Filter,
   Grid3X3,
@@ -56,6 +57,9 @@ const fallbackProducts = [
     quantity: 4,
     condition_label: "New",
     stock_label: "In stock",
+    wait_status: "buy_now",
+    wait_label: "Buy Now",
+    wait_message: "Buy now. Demand is expected to rise or stock is too limited to wait safely.",
     seller_name: "TechHub Beirut",
     seller_phone: "+961 70 000 000",
     store: { name: "TechHub Beirut", city: "Beirut" },
@@ -68,6 +72,9 @@ const fallbackProducts = [
     quantity: 2,
     condition_label: "Open box",
     stock_label: "Low stock",
+    wait_status: "buy_now",
+    wait_label: "Buy Now",
+    wait_message: "Buy now. Demand is expected to rise or stock is too limited to wait safely.",
     seller_name: "PC Garage",
     store: { name: "PC Garage", city: "Jounieh" },
   },
@@ -79,6 +86,9 @@ const fallbackProducts = [
     quantity: 9,
     condition_label: "New",
     stock_label: "In stock",
+    wait_status: "price_drop",
+    wait_label: "Price May Drop",
+    wait_message: "Waiting could pay off. Demand looks softer, so better deals may appear soon.",
     seller_name: "Circuit City",
     store: { name: "Circuit City", city: "Byblos" },
   },
@@ -94,6 +104,69 @@ function firstError(error) {
   return Array.isArray(value) ? value[0] : value ?? "Unable to create listing.";
 }
 
+function summarizeWaitSignal(products, totalQuantity, storeCount) {
+  const counts = products.reduce(
+    (totals, product) => {
+      const key = product.wait_status ?? "worth_waiting";
+      totals[key] = (totals[key] ?? 0) + 1;
+      return totals;
+    },
+    { buy_now: 0, worth_waiting: 0, price_drop: 0 },
+  );
+
+  if (totalQuantity <= 3) {
+    return {
+      wait_status: "buy_now",
+      wait_label: "Buy Now",
+      wait_message:
+        storeCount <= 1
+          ? "Low availability and limited seller coverage mean this is safer to buy now."
+          : "Demand is beating current supply, so waiting carries a real stock-out risk.",
+    };
+  }
+
+  if (storeCount >= 3 && totalQuantity >= 6) {
+    if (counts.price_drop > counts.buy_now && counts.price_drop >= counts.worth_waiting && totalQuantity >= 8) {
+      return {
+        wait_status: "price_drop",
+        wait_label: "Price May Drop",
+        wait_message: "Availability looks healthy across several stores, so waiting could unlock a better deal.",
+      };
+    }
+
+    return {
+      wait_status: "worth_waiting",
+      wait_label: "Worth Waiting",
+      wait_message: "Supply looks stable across multiple stores, so there is no strong rush to buy today.",
+    };
+  }
+
+  if (counts.price_drop > counts.buy_now && counts.price_drop >= counts.worth_waiting) {
+    return {
+      wait_status: "price_drop",
+      wait_label: "Price May Drop",
+      wait_message: "Availability looks healthy across the market, so waiting could unlock a better deal.",
+    };
+  }
+
+  if (counts.buy_now >= Math.max(counts.worth_waiting, counts.price_drop) && totalQuantity <= 5) {
+    return {
+      wait_status: "buy_now",
+      wait_label: "Buy Now",
+      wait_message:
+        storeCount <= 1
+          ? "Low availability and limited seller coverage mean this is safer to buy now."
+          : "Demand is beating current supply, so waiting carries a real stock-out risk.",
+    };
+  }
+
+  return {
+    wait_status: "worth_waiting",
+    wait_label: "Worth Waiting",
+    wait_message: "Supply looks stable, so there is no strong rush to buy today.",
+  };
+}
+
 function groupRetailProducts(items) {
   if (!Array.isArray(items) || items.length === 0) return [];
   const grouped = new Map();
@@ -107,6 +180,7 @@ function groupRetailProducts(items) {
     if (!current) {
       grouped.set(key, {
         ...product,
+        offers: [product],
         lowest_price: price,
         total_quantity: quantity,
         store_count: 1,
@@ -117,6 +191,7 @@ function groupRetailProducts(items) {
     grouped.set(key, {
       ...current,
       id: current.id,
+      offers: [...(current.offers ?? []), product],
       photo_url: current.photo_url || product.photo_url,
       image: current.image || product.image,
       image_url: current.image_url || product.image_url,
@@ -139,7 +214,27 @@ function groupRetailProducts(items) {
     });
   });
 
-  return [...grouped.values()];
+  return [...grouped.values()].map((product) => {
+    const offers = product.offers ?? [product];
+    const recommendation = summarizeWaitSignal(offers, Number(product.total_quantity ?? product.quantity ?? 0), Number(product.store_count ?? 1));
+    return {
+      ...product,
+      ...recommendation,
+    };
+  });
+}
+
+function waitStatusClass(waitStatus, quantity) {
+  if (Number(quantity ?? 0) < 1) {
+    return "retail-card__status retail-card__status--out";
+  }
+  return `retail-card__status retail-card__status--${waitStatus ?? "worth_waiting"}`;
+}
+
+function waitIndicatorClass(waitStatus) {
+  if (waitStatus === "buy_now") return "wait-indicator wait-indicator--buy";
+  if (waitStatus === "price_drop") return "wait-indicator wait-indicator--drop";
+  return "wait-indicator wait-indicator--wait";
 }
 
 function CustomSelect({ label, name, options, value, onChange, required = false }) {
@@ -176,12 +271,7 @@ function CustomSelect({ label, name, options, value, onChange, required = false 
 function ProductListingCard({ product, view }) {
   const image = product.photo_url || product.image || product.image_url;
   const Icon = categoryIcons[product.category] ?? Cpu;
-  const statusClass =
-    product.stock_status === "out_of_stock" || Number(product.quantity ?? 1) < 1
-      ? "retail-card__status retail-card__status--out"
-      : product.stock_status === "low_stock"
-        ? "retail-card__status retail-card__status--worth_waiting"
-        : "retail-card__status retail-card__status--buy_now";
+  const statusClass = waitStatusClass(product.wait_status, product.total_quantity ?? product.quantity);
 
   return (
     <a className={view === "list" ? "retail-card retail-card--list" : "retail-card"} href={`/retail/product/${product.id}`}>
@@ -189,7 +279,7 @@ function ProductListingCard({ product, view }) {
         {image ? <img src={image} alt={product.name} /> : <Icon size={52} />}
       </div>
       <span className={statusClass}>
-        {product.stock_label ?? "In stock"}
+        {Number(product.total_quantity ?? product.quantity ?? 0) < 1 ? "Out of Stock" : product.wait_label ?? "Worth Waiting"}
       </span>
       <div className="retail-card__body">
         <h3>{product.name}</h3>
@@ -197,6 +287,13 @@ function ProductListingCard({ product, view }) {
         <div className="retail-card__price">
           <strong>${formatPrice(product.lowest_price ?? product.price)}</strong>
           <span>from {product.store_count ?? 1} store{Number(product.store_count ?? 1) === 1 ? "" : "s"}</span>
+        </div>
+        <div className={`${waitIndicatorClass(product.wait_status)} retail-card__recommendation`}>
+          <span>
+            <Clock3 size={15} />
+            Worth Waiting Indicator
+          </span>
+          <strong>{product.wait_message ?? "Supply looks stable, so there is no strong rush to buy today."}</strong>
         </div>
         <div className="retail-card__meta">
           <span>
@@ -442,6 +539,21 @@ export default function RetailPage() {
               </button>
             ))}
           </div>
+        </section>
+
+        <section className="worth-strip" aria-label="Worth Waiting guidance">
+          <div>
+            <Clock3 size={20} />
+            <h2>Worth Waiting Indicator</h2>
+          </div>
+          <p>
+            <span className="dot dot--green" />
+            Buy now when supply is tight or demand is rising.
+            <span className="dot dot--yellow" />
+            Worth waiting when availability looks stable.
+            <span className="dot dot--orange" />
+            Price may drop when supply is healthy and demand cools.
+          </p>
         </section>
 
         <section className={view === "list" ? "retail-grid retail-grid--list" : "retail-grid"}>

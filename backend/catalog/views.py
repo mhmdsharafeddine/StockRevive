@@ -17,6 +17,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import AccountProfile, ListingRequest, Notification, Product, StockItem, Store, WholesaleListing, WholesaleOrder
+from .recommendations import apply_product_wait_signals, summarize_product_market
 from .serializers import (
     AccountSettingsSerializer,
     ListingRequestSerializer,
@@ -42,6 +43,7 @@ def sync_product_stock_status(product):
         product.stock_status = Product.STOCK_LOW
     else:
         product.stock_status = Product.STOCK_HIGH
+    apply_product_wait_signals(product)
 
 
 def sync_wholesale_stock_status(listing):
@@ -215,12 +217,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("You can only edit your own listings.")
         product = serializer.save()
         sync_product_stock_status(product)
-        product.save(update_fields=["stock_status", "updated_at"])
+        product.save(update_fields=["stock_status", "wait_status", "demand_label", "updated_at"])
 
     def perform_create(self, serializer):
         product = serializer.save()
         sync_product_stock_status(product)
-        product.save(update_fields=["stock_status", "updated_at"])
+        product.save(update_fields=["stock_status", "wait_status", "demand_label", "updated_at"])
 
     def perform_destroy(self, instance):
         if instance.seller_id != self.request.user.id:
@@ -280,6 +282,7 @@ def product_deals(request, product_id):
                 "total_quantity": stats["total_quantity"] or product.quantity,
                 "store_count": offers.count(),
             },
+            "recommendation": summarize_product_market(offers),
         }
     )
 
@@ -310,7 +313,7 @@ def create_listing_request(request, product_id):
 
     product.quantity -= 1
     sync_product_stock_status(product)
-    product.save(update_fields=["quantity", "stock_status", "updated_at"])
+    product.save(update_fields=["quantity", "stock_status", "wait_status", "demand_label", "updated_at"])
 
     listing_request = ListingRequest.objects.create(
         product=product,
@@ -455,7 +458,7 @@ def cancel_order(request, order_id):
     product = Product.objects.select_for_update().get(pk=order.product_id)
     product.quantity += 1
     sync_product_stock_status(product)
-    product.save(update_fields=["quantity", "stock_status", "updated_at"])
+    product.save(update_fields=["quantity", "stock_status", "wait_status", "demand_label", "updated_at"])
 
     order.mark_canceled()
 
@@ -917,7 +920,7 @@ def create_stock_listing(request, stock_item_id):
             seller_phone=request.user.profile.business_phone or request.user.profile.phone,
         )
         sync_product_stock_status(product)
-        product.save(update_fields=["stock_status", "updated_at"])
+        product.save(update_fields=["stock_status", "wait_status", "demand_label", "updated_at"])
         stock_item.quantity -= quantity
         stock_item.save(update_fields=["quantity", "updated_at"])
         return Response(

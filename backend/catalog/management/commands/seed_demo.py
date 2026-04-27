@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
 from catalog.models import AccountProfile, Product, Store, WholesaleListing
+from catalog.recommendations import apply_product_wait_signals
 
 
 class Command(BaseCommand):
@@ -52,9 +53,11 @@ class Command(BaseCommand):
             ("Intel Core i7-14700K", "CPUs", Decimal("409.00"), stores[2], "low_stock", False, False, 0, 2, "open_box"),
             ("AMD Ryzen 7 7800X3D", "CPUs", Decimal("349.00"), stores[0], "in_stock", True, True, 0, 4, "new"),
             ("NVIDIA RTX 4070 Super", "GPUs", Decimal("599.00"), stores[1], "low_stock", True, True, 0, 2, "open_box"),
-            ("ASUS B650E-F Motherboard", "Motherboards", Decimal("249.00"), stores[2], "in_stock", False, True, 5, 3, "new"),
+            ("ASUS B650E-F Motherboard", "Motherboards", Decimal("249.00"), stores[2], "in_stock", False, True, 10, 8, "new"),
             ("Corsair Vengeance 32GB DDR5", "RAM", Decimal("129.00"), stores[0], "in_stock", False, True, 0, 7, "new"),
-            ("Samsung 990 Pro 2TB NVMe", "Storage", Decimal("169.00"), stores[1], "in_stock", True, False, 8, 9, "new"),
+            ("Samsung 990 Pro 2TB NVMe", "Storage", Decimal("172.00"), stores[0], "in_stock", False, False, 10, 6, "new"),
+            ("Samsung 990 Pro 2TB NVMe", "Storage", Decimal("169.00"), stores[1], "in_stock", False, False, 8, 9, "new"),
+            ("Samsung 990 Pro 2TB NVMe", "Storage", Decimal("166.00"), stores[2], "in_stock", False, False, 12, 5, "new"),
             ("Cooler Master 850W Gold PSU", "Power Supplies", Decimal("139.00"), stores[2], "low_stock", False, False, 0, 2, "refurbished"),
         ]
 
@@ -69,7 +72,7 @@ class Command(BaseCommand):
         Product.objects.filter(name__in=old_demo_names).delete()
 
         for name, category, price, store, stock, trending, recommended, discount, quantity, condition in products:
-            Product.objects.update_or_create(
+            product, _ = Product.objects.update_or_create(
                 name=name,
                 store=store,
                 defaults={
@@ -83,13 +86,13 @@ class Command(BaseCommand):
                     "seller_phone": "+961 70 000 000",
                     "store_count": 1,
                     "distance_miles": Decimal("1.0"),
-                    "wait_status": "buy_now",
-                    "demand_label": "",
                     "is_trending": trending,
                     "is_recommended": recommended,
                     "discount_percent": discount,
                 },
             )
+            apply_product_wait_signals(product)
+            product.save(update_fields=["wait_status", "demand_label", "updated_at"])
 
         wholesale_products = [
             ("Intel Core i7-14700K Bulk Tray", "CPUs", Decimal("330.00"), stores[0], 45, 10, "low", "high", True),

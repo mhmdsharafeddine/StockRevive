@@ -8,6 +8,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
 from .models import AccountProfile, ListingRequest, Notification, Product, StockItem, Store, WholesaleListing, WholesaleOrder
+from .recommendations import (
+    apply_product_wait_signals,
+    get_product_seller_context,
+    get_product_wait_context,
+    get_wholesale_seller_context,
+)
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -49,8 +55,15 @@ class ProductSerializer(serializers.ModelSerializer):
     store = StoreSerializer(read_only=True)
     stock_label = serializers.CharField(source="get_stock_status_display", read_only=True)
     wait_label = serializers.CharField(source="get_wait_status_display", read_only=True)
+    wait_message = serializers.SerializerMethodField()
+    wait_reason = serializers.SerializerMethodField()
+    wait_tone = serializers.SerializerMethodField()
     condition_label = serializers.CharField(source="get_condition_display", read_only=True)
     photo_url = serializers.SerializerMethodField()
+    seller_recommendation = serializers.SerializerMethodField()
+    seller_recommendation_label = serializers.SerializerMethodField()
+    seller_recommendation_tone = serializers.SerializerMethodField()
+    seller_recommendation_message = serializers.SerializerMethodField()
     store_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
     store_city = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
@@ -72,10 +85,17 @@ class ProductSerializer(serializers.ModelSerializer):
             "stock_label",
             "wait_status",
             "wait_label",
+            "wait_message",
+            "wait_reason",
+            "wait_tone",
             "rating",
             "distance_miles",
             "store_count",
             "demand_label",
+            "seller_recommendation",
+            "seller_recommendation_label",
+            "seller_recommendation_tone",
+            "seller_recommendation_message",
             "seller",
             "store",
             "seller_name",
@@ -97,6 +117,33 @@ class ProductSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(url) if request else url
 
         return product.image_url
+
+    def get_wait_context(self, product):
+        return get_product_wait_context(product)
+
+    def get_wait_message(self, product):
+        return self.get_wait_context(product)["wait_message"]
+
+    def get_wait_reason(self, product):
+        return self.get_wait_context(product)["wait_reason"]
+
+    def get_wait_tone(self, product):
+        return self.get_wait_context(product)["wait_tone"]
+
+    def get_seller_context(self, product):
+        return get_product_seller_context(product)
+
+    def get_seller_recommendation(self, product):
+        return self.get_seller_context(product)["seller_recommendation"]
+
+    def get_seller_recommendation_label(self, product):
+        return self.get_seller_context(product)["seller_recommendation_label"]
+
+    def get_seller_recommendation_tone(self, product):
+        return self.get_seller_context(product)["seller_recommendation_tone"]
+
+    def get_seller_recommendation_message(self, product):
+        return self.get_seller_context(product)["seller_recommendation_message"]
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -123,6 +170,10 @@ class ProductSerializer(serializers.ModelSerializer):
         validated_data["seller"] = user
         validated_data["seller_name"] = store_name
         validated_data["seller_phone"] = profile.business_phone or profile.phone
+        product = Product(**validated_data)
+        apply_product_wait_signals(product)
+        validated_data["wait_status"] = product.wait_status
+        validated_data["demand_label"] = product.demand_label
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -130,7 +181,10 @@ class ProductSerializer(serializers.ModelSerializer):
         if store_city:
             instance.store.city = store_city
             instance.store.save(update_fields=["city"])
-        return super().update(instance, validated_data)
+        product = super().update(instance, validated_data)
+        apply_product_wait_signals(product)
+        product.save(update_fields=["wait_status", "demand_label", "updated_at"])
+        return product
 
 
 class AccountProfileSerializer(serializers.ModelSerializer):
@@ -376,6 +430,10 @@ class WholesaleListingSerializer(serializers.ModelSerializer):
     store = StoreSerializer(read_only=True)
     stock_status_label = serializers.CharField(source="get_stock_status_display", read_only=True)
     demand_label = serializers.CharField(source="get_demand_level_display", read_only=True)
+    seller_recommendation = serializers.SerializerMethodField()
+    seller_recommendation_label = serializers.SerializerMethodField()
+    seller_recommendation_tone = serializers.SerializerMethodField()
+    seller_recommendation_message = serializers.SerializerMethodField()
 
     class Meta:
         model = WholesaleListing
@@ -393,12 +451,31 @@ class WholesaleListingSerializer(serializers.ModelSerializer):
             "stock_status_label",
             "demand_level",
             "demand_label",
+            "seller_recommendation",
+            "seller_recommendation_label",
+            "seller_recommendation_tone",
+            "seller_recommendation_message",
             "is_trending",
             "store",
             "seller",
             "updated_at",
         ]
         read_only_fields = ["seller", "store", "updated_at"]
+
+    def get_seller_context(self, listing):
+        return get_wholesale_seller_context(listing)
+
+    def get_seller_recommendation(self, listing):
+        return self.get_seller_context(listing)["seller_recommendation"]
+
+    def get_seller_recommendation_label(self, listing):
+        return self.get_seller_context(listing)["seller_recommendation_label"]
+
+    def get_seller_recommendation_tone(self, listing):
+        return self.get_seller_context(listing)["seller_recommendation_tone"]
+
+    def get_seller_recommendation_message(self, listing):
+        return self.get_seller_context(listing)["seller_recommendation_message"]
 
     def create(self, validated_data):
         request = self.context.get("request")

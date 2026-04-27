@@ -1436,6 +1436,31 @@ button {
   font-size: 17px;
 }
 
+.retail-card__recommendation {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+.retail-card__recommendation span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #bfffd6;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.retail-card__recommendation strong {
+  color: white;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
 .retail-card__rating {
   display: flex;
   align-items: center;
@@ -1833,7 +1858,24 @@ button {
   color: white;
 }
 
-.product-quick-card div {
+.product-quick-card__decision {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.product-quick-card__decision strong {
+  color: white;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.product-quick-card__decision small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.product-quick-card__metric {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1842,13 +1884,19 @@ button {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.product-quick-card span {
+.product-quick-card__metric span {
   color: var(--muted);
 }
 
-.product-quick-card strong {
+.product-quick-card__metric strong {
   color: white;
   font-size: 22px;
+}
+
+.product-quick-card .product-quick-card__decision {
+  display: grid;
+  align-items: start;
+  justify-items: stretch;
 }
 
 .store-offers-section {
@@ -1985,6 +2033,66 @@ button {
   transform: translateY(-1px);
   border-color: rgba(0, 200, 83, 0.3);
   background: rgba(0, 200, 83, 0.08);
+}
+
+.store-offer-card__decision {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+
+.store-offer-card__decision span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #bfffd6;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.store-offer-card__decision strong {
+  color: white;
+  line-height: 1.45;
+}
+
+.store-offer-card__decision p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.wait-indicator--buy {
+  border: 1px solid rgba(0, 200, 83, 0.3);
+  background: linear-gradient(180deg, rgba(0, 200, 83, 0.16), rgba(0, 200, 83, 0.07));
+}
+
+.wait-indicator--buy span:first-child,
+.wait-indicator--buy > span:not(.decision-pill) {
+  color: #bfffd6;
+}
+
+.wait-indicator--wait {
+  border: 1px solid rgba(240, 188, 0, 0.3);
+  background: linear-gradient(180deg, rgba(240, 188, 0, 0.14), rgba(181, 113, 0, 0.08));
+}
+
+.wait-indicator--wait span:first-child,
+.wait-indicator--wait > span:not(.decision-pill) {
+  color: #ffe58c;
+}
+
+.wait-indicator--drop {
+  border: 1px solid rgba(255, 122, 0, 0.34);
+  background: linear-gradient(180deg, rgba(255, 122, 0, 0.14), rgba(180, 52, 0, 0.09));
+}
+
+.wait-indicator--drop span:first-child,
+.wait-indicator--drop > span:not(.decision-pill) {
+  color: #ffc79a;
 }
 
 .store-offer-card__anomaly {
@@ -2335,6 +2443,38 @@ button {
 .my-listing-card__stats strong {
   color: white;
   font-size: 18px;
+}
+
+.decision-note {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.decision-note > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #cfe8d9;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.decision-note__summary {
+  display: grid;
+  gap: 10px;
+}
+
+.decision-note__summary p,
+.decision-note--business p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .my-listing-card__details {
@@ -3241,6 +3381,49 @@ button {
 .wholesale-badge--available {
   color: #bfffd6;
   background: rgba(0, 200, 83, 0.26);
+}
+
+.decision-pill {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.decision-pill--hold {
+  color: #d8ffe7;
+  background: rgba(0, 200, 83, 0.2);
+}
+
+.decision-pill--buy {
+  color: #d8ffe7;
+  background: rgba(0, 200, 83, 0.2);
+}
+
+.decision-pill--wait {
+  color: #ffe9a8;
+  background: rgba(181, 113, 0, 0.28);
+}
+
+.decision-pill--drop {
+  color: #ffd0b0;
+  background: rgba(180, 52, 0, 0.32);
+}
+
+.decision-pill--sell {
+  color: #ffd8de;
+  background: rgba(255, 66, 107, 0.22);
+}
+
+.decision-note--business {
+  margin-top: 16px;
+  border-color: rgba(0, 200, 83, 0.18);
+  background: rgba(0, 200, 83, 0.06);
 }
 
 .wholesale-card__location {
